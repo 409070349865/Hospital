@@ -1,0 +1,246 @@
+/* Root theme variables */
+:root {
+  --bg:#0b1220;
+  --card:#141b2d;
+  --muted:#8fa3bf;
+  --accent:#4f7df3;
+  --accent2:#d4f500;
+  --danger:#053275;
+  --text:#e6edf7;
+  --border:#1f2a44;
+  --gradient:linear-gradient(135deg, #4f7df3, #370574);
+}
+
+body {
+  margin:0;
+  font-family:'Inter', sans-serif;
+  color:var(--text);
+  background:linear-gradient(135deg, #000000, #11026a, #025e0f);
+  background-size:400% 400%;
+  animation:gradientShift 18s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position:0% 50%; }
+  50% { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
+}
+
+/* Smooth fade + scale for tabs */
+.tab {
+  display:none;
+  content-visibility:hidden;
+  opacity:0;
+  transform:translateY(20px) scale(0.98);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.tab.active {
+  display:block;
+  content-visibility:visible;
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+/* Header glow effect */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centers horizontally */
+  justify-content: center; /* centers vertically if header has height */
+  padding: 1rem;
+  background: linear-gradient(135deg, #a70303, #0528c5);
+}
+
+header h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0.5rem 0 1rem 0;
+  text-align: center;   /* ensures text itself is centered */
+  animation: fadeSlide 2s ease-in-out forwards;
+}
+
+
+@keyframes slideDown {
+  from { transform:translateY(-100%); opacity:0 }
+  to { transform:translateY(0); opacity:1 }
+}
+
+/* Navigation buttons with animated underline */
+nav button {
+  position:relative;
+  overflow:hidden;
+  background:transparent;
+  border:none;
+  color:var(--muted);
+  font-weight:600;
+  padding:10px 16px;
+  cursor:pointer;
+  transition:color .3s;
+}
+nav button::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  width:0;
+  height:2px;
+  background:var(--gradient);
+  transition:all .3s ease;
+}
+nav button:hover { color:var(--text) }
+nav button:hover::after {
+  left:0;
+  width:100%;
+}
+.patients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.patient-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.patient-card:hover {
+  transform: translateY(-5px);
+}
+
+.patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .8rem;
+}
+
+.patient-name {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.admission-type {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #ff6b6b;
+  color: #fff;
+}
+
+.admission-type.elective {
+  background: #4caf50;
+}
+
+.patient-info div {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+}
+
+.patient-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.patient-actions button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.patient-actions button:first-child {
+  background: #4a90e2;
+  color: #049724;
+}
+
+.patient-actions button:last-child {
+  background: #e74c3c;
+  color: #0036b5;
+}
+
+/* Cards with hover lift + gradient border */
+.card {
+  background:var(--card);
+  border:2px solid transparent;
+  border-radius:16px;
+  padding:20px;
+  position:relative;
+  transition:transform .4s ease, border .4s ease;
+}
+.card:hover {
+  transform:translateY(-6px) scale(1.02);
+  border-image:var(--gradient) 1;
+}
+
+/* Metric numbers with count-up animation */
+.metric {
+  font-size:32px;
+  font-weight:700;
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:fadeInUp .8s ease;
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(20px) }
+  to { opacity:1; transform:translateY(0) }
+}
+
+/* Table row hover with glow */
+tbody tr {
+  transition:background .3s, box-shadow .3s;
+}
+tbody tr:hover {
+  background:rgba(79,125,243,.08);
+  box-shadow:inset 0 0 10px rgba(79,125,243,.3);
+}
+
+/* Modal fade-in/out */
+.modal {
+  display:none;
+  content-visibility:hidden;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+.modal[style*="display: flex"] {
+  display:flex;
+  content-visibility:visible;
+  opacity:1;
+}
+
+/* Sensor cards with pulsing border */
+.sensor-card {
+  border:2px solid var(--border);
+  border-radius:14px;
+  background:var(--card);
+  animation:fadeIn .8s ease;
+}
+.sensor-card:hover {
+  border-color:var(--accent2);
+  box-shadow:0 0 12px rgba(34,197,94,.4);
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:scale(.95) }
+  to { opacity:1; transform:scale(1) }
+}
+
+/* Animated chart containers */
+canvas {
+  animation:fadeInUp .8s ease;
+}
+
+.tab.leaving {
+  opacity:0;
+  transform:translateY(20px) scale(0.98);
+  content-visibility:hidden;
+}

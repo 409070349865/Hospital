@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hopital</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js"></script>
+
+</head>
+<body>
+<header>
+  <h1>Hopital</h1>
+  <nav role="tablist">
+    <button data-tab="patients" aria-controls="patients" aria-selected="true">Patients</button>
+    <button data-tab="add" aria-controls="add" aria-selected="false">Add Patient</button>
+    <button data-tab="analytics" aria-controls="analytics" aria-selected="false">Analytics</button>
+    <button data-tab="import" aria-controls="import" aria-selected="false">Import/Export</button>
+    <button data-tab="sensors" aria-controls="sensors" aria-selected="false">Real-time Sensors</button>
+  </nav>
+</header>
+
+<main>
+  <!-- Patients -->
+  <section id="patients" class="tab active" role="tabpanel">
+    <div class="tab-content">
+      <div class="toolbar">
+        <input id="search" type="text" placeholder="Search by name, condition, doctor, hospital">
+        <select id="filterAdmission">
+          <option value="">Admission Type</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Elective">Elective</option>
+          <option value="Transfer">Transfer</option>
+        </select>
+        <select id="filterDoctor"><option value="">Doctor</option></select>
+        <select id="filterHospital"><option value="">Hospital</option></select>
+        <button id="clearFilters">Clear</button>
+        <button id="exportJson">Export JSON</button>
+        <button id="exportCsv">Export CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table id="patientsTable">
+          <thead>
+            <tr>
+              <th data-sort="name">Name</th>
+              <th data-sort="age">Age</th>
+              <th data-sort="gender">Gender</th>
+              <th data-sort="bloodType">Blood Type</th>
+              <th data-sort="medicalCondition">Medical Condition</th>
+              <th data-sort="dateOfAdmission">Date of Admission</th>
+              <th data-sort="doctor">Doctor</th>
+              <th data-sort="hospital">Hospital</th>
+              <th data-sort="insuranceProvider">Insurance Provider</th>
+              <th data-sort="billingAmount">Billing Amount</th>
+              <th data-sort="roomNumber">Room Number</th>
+              <th data-sort="admissionType">Admission Type</th>
+              <th data-sort="dischargeDate">Discharge Date</th>
+              <th>Medication</th>
+              <th>Test Results</th>
+              <th data-sort="riskScore">Risk Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Patient -->
+  <section id="add" class="tab" role="tabpanel">
+    <div class="tab-content">
+      <form id="addForm">
+        <div class="grid">
+          <input id="name" placeholder="Name" required>
+          <input id="age" type="number" min="0" placeholder="Age" required>
+          <select id="gender" required>
+            <option value="">Gender</option><option>Male</option><option>Female</option><option>Other</option>
+          </select>
+          <select id="bloodType" required>
+            <option value="">Blood Type</option>
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+          </select>
+          <input id="medicalCondition" placeholder="Medical Condition" required>
+          <input id="dateOfAdmission" type="date" required>
+          <input id="doctor" placeholder="Doctor" required>
+          <input id="hospital" placeholder="Hospital" required>
+          <input id="insuranceProvider" placeholder="Insurance Provider" required>
+          <input id="billingAmount" type="number" min="0" step="0.01" placeholder="Billing Amount" required>
+          <input id="roomNumber" placeholder="Room Number" required>
+          <select id="admissionType" required>
+            <option value="">Admission Type</option>
+            <option>Emergency</option><option>Elective</option><option>Transfer</option>
+          </select>
+          <input id="dischargeDate" type="date">
+          <input id="medication" placeholder="Medication (comma-separated)">
+          <input id="testResults" placeholder="Test Results (comma-separated)">
+        </div>
+        <button type="submit">Add Patient</button>
+      </form>
+    </div>
+  </section>
+
+  
+
+  <!-- Analytics -->
+  <section id="analytics" class="tab" role="tabpanel">
+    <div class="tab-content">
+      <div class="cards">
+        <div class="card"><div class="card-title">Average Billing</div><div id="avgBilling" class="metric">₹0</div></div>
+        <div class="card"><div class="card-title">Average Length of Stay</div><div id="avgLos" class="metric">0 days</div></div>
+        <div class="card"><div class="card-title">Predicted Readmission Risk Avg</div><div id="avgRisk" class="metric">0%</div></div>
+        <div class="card"><div class="card-title">Emergency Rate</div><div id="emergencyRate" class="metric">0%</div></div>
+      </div>
+      <div class="charts">
+        <canvas id="billingByHospital"></canvas>
+        <canvas id="riskByCondition"></canvas>
+        <canvas id="admissionsOverTime"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Import -->
+  <section id="import" class="tab" role="tabpanel">
+    <div class="tab-content">
+      <div class="importers">
+        <div class="import-block"><div class="block-title">Import JSON</div><input id="importJson" type="file" accept=".json"></div>
+        <div class="import-block"><div class="block-title">Import CSV</div><input id="importCsv" type="file" accept=".csv"></div>
+        <div class="import-block"><div class="block-title">Download Template</div>
+          <button id="downloadTemplateJson">JSON Template</button>
+          <button id="downloadTemplateCsv">CSV Template</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sensors -->
+  <section id="sensors" class="tab" role="tabpanel">
+    <div class="tab-content">
+      <div class="sensor-grid">
+        <div class="sensor-card">
+          <div class="card-title">Wearable Stream</div>
+          <div class="stream">
+            <div><span>Heart Rate:</span> <span id="hr">0 bpm</span></div>
+            <div><span>Steps:</span> <span id="steps">0</span></div>
+            <div><span>SpO₂:</span> <span id="spo2">0%</span></div>
+          </div>
+          <button id="startStream">Start</button>
+          <button id="stopStream">Stop</button>
+        </div>
+        <div class="sensor-card">
+          <div class="card-title">Live Risk Adjustment</div>
+          <div id="liveRisk" class="metric">0%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
